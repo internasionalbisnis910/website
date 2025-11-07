@@ -113,22 +113,28 @@
     <div class="mt-10 bg-sky-800 text-white rounded-lg p-6 shadow">
       <h4 class="font-semibold text-lg">Kirim CV & Lamaran</h4>
       <p class="text-sm mt-2">10 pendaftar pertama akan diutamakan. Pendaftaran ditutup: <strong>14 November 2025</strong>.</p>
-      <form id="applyForm" class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3" onsubmit="return handleApply(event)">
-        <input type="text" id="name" placeholder="Nama lengkap" required class="p-3 rounded text-black" />
+      <form id="applyForm" class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3" onsubmit="return sendToWhatsApp(event)">
+        <input type="text" id="name" placeholder="Nama Lengkap" required class="p-3 rounded text-black" />
+        <input type="number" id="age" placeholder="Usia" required class="p-3 rounded text-black" />
+        <select id="gender" required class="p-3 rounded text-black">
+          <option value="">Jenis Kelamin</option>
+          <option>Pria</option>
+          <option>Wanita</option>
+        </select>
+        <input type="text" id="education" placeholder="Ijazah Terakhir (SMA/SMK/D3/S1)" required class="p-3 rounded text-black" />
         <select id="position" required class="p-3 rounded text-black">
-          <option value="">Pilih posisi</option>
+          <option value="">Posisi Dilamar</option>
           <option>Data Entry</option>
           <option>Admin</option>
           <option>Asisten Manager</option>
         </select>
-        <input type="tel" id="phone" placeholder="No. Telepon" required class="p-3 rounded text-black" />
+        <input type="tel" id="phone" placeholder="No. Telepon / WhatsApp" required class="p-3 rounded text-black" />
         <div class="sm:col-span-2">
           <label class="text-sm">Unggah CV (pdf/docx)</label>
           <input type="file" id="cv" accept=".pdf,.doc,.docx" class="mt-2 w-full text-black" />
         </div>
         <div class="sm:col-span-2 flex gap-3 mt-3">
-          <button type="submit" class="bg-white text-sky-800 px-4 py-2 rounded font-semibold">Kirim Lamaran</button>
-          <button type="button" onclick="downloadDraft()" class="border border-white px-4 py-2 rounded">Simpan Draft</button>
+          <button type="submit" class="bg-white text-sky-800 px-4 py-2 rounded font-semibold">Kirim Lamaran via WhatsApp</button>
         </div>
       </form>
     </div>
@@ -154,24 +160,23 @@
   </footer>
 
   <script>
-    function handleApply(e) {
-      e.preventDefault();
-      alert("Terima kasih! Data lamaran Anda telah tersimpan sementara.");
-      return false;
-    }
+    function sendToWhatsApp(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value;
+      const age = document.getElementById('age').value;
+      const gender = document.getElementById('gender').value;
+      const education = document.getElementById('education').value;
+      const position = document.getElementById('position').value;
+      const phone = document.getElementById('phone').value;
 
-    function downloadDraft() {
-      const data = {
-        name: document.getElementById('name').value,
-        position: document.getElementById('position').value,
-        phone: document.getElementById('phone').value
-      };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = "draft_lamaran.json";
-      link.click();
+      const message = `Halo HRD PT. INTERNASIONAL BUILDING SURABAYA,%0ASaya ingin melamar untuk posisi: *${position}*%0A%0A` +
+                      `Nama: ${name}%0AUsia: ${age} Tahun%0AJenis Kelamin: ${gender}%0A` +
+                      `Ijazah Terakhir: ${education}%0ANo. HP: ${phone}%0A%0ASaya sudah menyiapkan CV dan siap untuk proses seleksi.`;
+      const waNumber = "6285158988924";
+
+      window.open(`https://wa.me/${waNumber}?text=${message}`, "_blank");
     }
   </script>
+
 </body>
 </html>
